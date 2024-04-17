@@ -27,6 +27,8 @@ namespace Route.Talabat.Repository
 
 		public async Task<T?> GetAsync(int id)
 		{
+			if (typeof(T) == typeof(Product))
+				return await _dbContext.Set<Product>().Where(p=>p.Id==id).Include(p => p.Brand).Include(p => p.Category).FirstOrDefaultAsync() as T;
 			return await _dbContext.Set<T>().FindAsync(id);
 		}
 	}
