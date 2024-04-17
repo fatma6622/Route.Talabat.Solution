@@ -20,8 +20,8 @@ namespace Route.Talabat.Repository.Data
 		{
 			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 		}
-		DbSet<Product> Products { get; set; }
-		DbSet<ProductBrand> ProductBrands { get; set; }
-		DbSet<ProductCategory> ProductCategorys { get; set; }
+		public DbSet<Product> Products { get; set; }
+		public DbSet<ProductBrand> ProductBrands { get; set; }
+		public DbSet<ProductCategory> ProductCategorys { get; set; }
 	}
 }

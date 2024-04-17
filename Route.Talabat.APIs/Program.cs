@@ -29,11 +29,12 @@ namespace Route.Talabat.APIs
 			using var scope=app.Services.CreateScope();
 			var services=scope.ServiceProvider;
 			var _dbContext=services.GetRequiredService<StoreContext>();
-			//make migration
+
 			var loggerFactory=services.GetRequiredService<ILoggerFactory>();
 			try
 			{
-				await _dbContext.Database.MigrateAsync();
+				await _dbContext.Database.MigrateAsync();           //make migration
+				await StoreContextSeed.seedAsync(_dbContext);       //dataSeeding
 			}
 			catch (Exception ex)
 			{
