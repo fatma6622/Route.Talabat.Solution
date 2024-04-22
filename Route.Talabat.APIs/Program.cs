@@ -28,7 +28,8 @@ namespace Route.Talabat.APIs
 			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductBrand>,GenericRepository<ProductBrand>>();
 			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>,GenericRepository<ProductCategory>>();
 			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
+			//webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
+			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 			var app = webApplicationBuilder.Build();
 
@@ -60,6 +61,7 @@ namespace Route.Talabat.APIs
 			}
 
 			app.UseHttpsRedirection();
+			app.UseStaticFiles();
 
 			app.UseAuthorization();
 
