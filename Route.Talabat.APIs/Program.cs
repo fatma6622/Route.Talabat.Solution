@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Route.Talabat.APIs.Errors;
+using Route.Talabat.APIs.Extensions;
 using Route.Talabat.APIs.Helper;
 using Route.Talabat.APIs.MiddleWares;
 using Route.Talabat.Core.Entities;
@@ -20,33 +21,14 @@ namespace Route.Talabat.APIs
 			// Add services to the container.
 
 			webApplicationBuilder.Services.AddControllers();
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			webApplicationBuilder.Services.AddEndpointsApiExplorer();
-			webApplicationBuilder.Services.AddSwaggerGen();
+			webApplicationBuilder.Services.AddSwaggarServices();
 			webApplicationBuilder.Services.AddDbContext<StoreContext>(
 				options => {
 					options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 				}
 			);
-			//webApplicationBuilder.Services.AddScoped<IGenericRepository<Product>,GenericRepository<Product>>();
-			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductBrand>,GenericRepository<ProductBrand>>();
-			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>,GenericRepository<ProductCategory>>();
-			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			//webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
-			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
-			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.InvalidModelStateResponseFactory = (actionContext) =>
-				{
-					var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0).SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage).ToList();
-					var response = new ApiValidationErrorResponse()
-					{
-						Errors = errors
-					};
-					return new BadRequestObjectResult(response);
-				};
-
-			});
+			webApplicationBuilder.Services.AddApplictionServices();
+			//ApplicationServicesExtension.AddApplictionServices(webApplicationBuilder.Services);
 			var app = webApplicationBuilder.Build();
 
 			//Ask CLR to creating object from DbContext Explictly
@@ -72,8 +54,7 @@ namespace Route.Talabat.APIs
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggarMiddleware();
 			}
 			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();
