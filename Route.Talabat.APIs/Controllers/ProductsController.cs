@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.Dtos;
+using Route.Talabat.APIs.Errors;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.IRepository;
 using Route.Talabat.Core.Specificatioons;
@@ -32,7 +33,7 @@ namespace Route.Talabat.APIs.Controllers
 			var spec = new ProductWithBrandAndCategorySpecifications(Id);
 			var product = await _productsRepo.GetWithSpecAsync(spec);
 			if(product == null)
-				return NotFound();
+				return NotFound(new ApiResponse(404));
 			return Ok(_mapper.Map<Product,ProductToReturnDto>(product));
 		}
 	}
