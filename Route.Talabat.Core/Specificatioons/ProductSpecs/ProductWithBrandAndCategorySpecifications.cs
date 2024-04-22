@@ -14,5 +14,10 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
             Includes.Add(p=>p.Brand);
             Includes.Add(p=>p.Category);
 		}
-    }
+		public ProductWithBrandAndCategorySpecifications(int id) : base(p=>p.Id==id)
+		{
+			Includes.Add(p => p.Brand);
+			Includes.Add(p => p.Category);
+		}
+	}
 }

@@ -25,7 +25,8 @@ namespace Route.Talabat.APIs.Controllers
 		[HttpGet("{Id}")]
 		public async Task<ActionResult<Product>> GetProduct(int Id)
 		{
-			var product = await _productsRepo.GetAsync(Id);
+			var spec = new ProductWithBrandAndCategorySpecifications(Id);
+			var product = await _productsRepo.GetWithSpecAsync(spec);
 			if(product == null)
 				return NotFound();
 			return Ok(product);
