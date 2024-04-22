@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helper;
+using Route.Talabat.APIs.MiddleWares;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.IRepository;
 using Route.Talabat.Repository;
@@ -67,7 +68,7 @@ namespace Route.Talabat.APIs
 				logger.LogError(ex, "an error accured during apply migration");
 			}
 
-
+			app.UseMiddleware<ExceptionMiddleware>();
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
