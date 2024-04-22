@@ -1,4 +1,7 @@
- using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helper;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.IRepository;
@@ -30,7 +33,19 @@ namespace Route.Talabat.APIs
 			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			//webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
 			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options =>
+			{
+				options.InvalidModelStateResponseFactory = (actionContext) =>
+				{
+					var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0).SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage).ToList();
+					var response = new ApiValidationErrorResponse()
+					{
+						Errors = errors
+					};
+					return new BadRequestObjectResult(response);
+				};
 
+			});
 			var app = webApplicationBuilder.Build();
 
 			//Ask CLR to creating object from DbContext Explictly
