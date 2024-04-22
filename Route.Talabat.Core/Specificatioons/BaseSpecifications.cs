@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Route.Talabat.Core.Specificatioons
 {
-	internal class BaseSpecifications<T> : ISpecifications<T> where T : BaseEntity
+	public class BaseSpecifications<T> : ISpecifications<T> where T : BaseEntity
 	{
 		public Expression<Func<T, bool>>? Criteria { get; set; } = null;
 		public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
