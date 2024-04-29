@@ -9,17 +9,17 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
 {
 	public class ProductWithBrandAndCategorySpecifications:BaseSpecifications<Product>
 	{
-        public ProductWithBrandAndCategorySpecifications(string? sort, int? brandId, int? categoryId) 
+        public ProductWithBrandAndCategorySpecifications(ProductSpecParam specParam) 
 			:base(p=>
-			         (!brandId.HasValue||p.BrandId==brandId.Value) && 
-			         (!categoryId.HasValue||p.CategoryId==categoryId.Value)
+			         (!specParam.BrandId.HasValue||p.BrandId== specParam.BrandId.Value) && 
+			         (!specParam.CategoryId.HasValue||p.CategoryId== specParam.CategoryId.Value)
 			)
         {
             Includes.Add(p=>p.Brand);
             Includes.Add(p=>p.Category);
-			if (!string.IsNullOrEmpty(sort))
+			if (!string.IsNullOrEmpty(specParam.Sort))
 			{
-				switch(sort)
+				switch(specParam.Sort)
 				{
 					case "priceAsc":
 						AddOrderBy(p=>p.Price);
@@ -33,6 +33,8 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
 				}
 			}else
 				AddOrderBy(p=>p.Name);
+
+			ApplyPagination((specParam.PageIndex - 1) * specParam.PageSize, specParam.PageSize); 
 		}
 		public ProductWithBrandAndCategorySpecifications(int Id) : base(p=>p.Id==Id)
 		{
