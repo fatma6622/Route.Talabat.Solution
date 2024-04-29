@@ -9,7 +9,11 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
 {
 	public class ProductWithBrandAndCategorySpecifications:BaseSpecifications<Product>
 	{
-        public ProductWithBrandAndCategorySpecifications(string sort) :base()
+        public ProductWithBrandAndCategorySpecifications(string? sort, int? brandId, int? categoryId) 
+			:base(p=>
+			         (!brandId.HasValue||p.BrandId==brandId.Value) && 
+			         (!categoryId.HasValue||p.CategoryId==categoryId.Value)
+			)
         {
             Includes.Add(p=>p.Brand);
             Includes.Add(p=>p.Category);
