@@ -11,6 +11,7 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
 	{
         public ProductWithBrandAndCategorySpecifications(ProductSpecParam specParam) 
 			:base(p=>
+			         (string.IsNullOrEmpty(specParam.Search)||p.Name.ToLower().Contains(specParam.Search ))&&
 			         (!specParam.BrandId.HasValue||p.BrandId== specParam.BrandId.Value) && 
 			         (!specParam.CategoryId.HasValue||p.CategoryId== specParam.CategoryId.Value)
 			)

@@ -19,5 +19,12 @@ namespace Route.Talabat.Core.Specificatioons.ProductSpecs
         public string? Sort { get; set; }
         public int? BrandId { get; set; }
         public int? CategoryId { get; set; }
+        //public string? Search { get; set; }
+		private string? search;
+		public string? Search
+		{
+			get { return search; }
+			set { search = value?.ToLower(); }
+		}
 	}
 }
