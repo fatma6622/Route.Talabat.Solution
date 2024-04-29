@@ -14,5 +14,6 @@ namespace Route.Talabat.Core.IRepository
 		Task<IReadOnlyList<T>> GetAllAsync();
 		Task<T?> GetWithSpecAsync(ISpecifications<T> spec);
 		Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
+		Task<int> GetCountAsync(ISpecifications<T> spec);
 	}
 }

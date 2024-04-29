@@ -38,6 +38,11 @@ namespace Route.Talabat.Repository
 			return await _dbContext.Set<T>().FindAsync(id);
 		}
 
+		public async Task<int> GetCountAsync(ISpecifications<T> spec)
+		{
+			return await SpecifictionsEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec).CountAsync();
+		}
+
 		public async Task<T?> GetWithSpecAsync(ISpecifications<T> spec)
 		{
 			return await SpecifictionsEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec).FirstOrDefaultAsync();

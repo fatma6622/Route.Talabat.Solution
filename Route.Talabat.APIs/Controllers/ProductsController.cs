@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.Dtos;
 using Route.Talabat.APIs.Errors;
+using Route.Talabat.APIs.Helper;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.IRepository;
 using Route.Talabat.Core.Specificatioons;
@@ -26,11 +27,14 @@ namespace Route.Talabat.APIs.Controllers
 			_mapper = mapper;
 		}
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParam specParam)
+		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParam specParam)
 		{
 			var spec = new ProductWithBrandAndCategorySpecifications(specParam);
 			var products=await _productsRepo.GetAllWithSpecAsync(spec);
-			return Ok(_mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+			var data = _mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+			var countSpec = new ProductWithFiltertionForCountSpecification(specParam);
+			var count=await _productsRepo.GetCountAsync(countSpec);
+			return Ok(new Pagination<ProductToReturnDto>(specParam.PageIndex,specParam.PageSize,count,data));
 		}
 		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
