@@ -9,6 +9,7 @@ using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.IRepository;
 using Route.Talabat.Repository;
 using Route.Talabat.Repository.Data;
+using StackExchange.Redis;
 
 namespace Route.Talabat.APIs
 {
@@ -26,6 +27,12 @@ namespace Route.Talabat.APIs
 				options => {
 					options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 				}
+			);
+			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
+			{
+				var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
+				return ConnectionMultiplexer.Connect(connection);
+			}
 			);
 			webApplicationBuilder.Services.AddApplictionServices();
 			//ApplicationServicesExtension.AddApplictionServices(webApplicationBuilder.Services);
