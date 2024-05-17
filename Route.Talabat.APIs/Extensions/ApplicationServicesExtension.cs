@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helper;
 using Route.Talabat.Core.IRepository;
-using Route.Talabat.Repository;
+using Route.Talabat.Repository.BasketRepo;
+using Route.Talabat.Repository.GenericRepo;
 
 namespace Route.Talabat.APIs.Extensions
 {
-	public static class ApplicationServicesExtension
+    public static class ApplicationServicesExtension
 	{
 		public static IServiceCollection AddApplictionServices(this IServiceCollection services)
 		{
+
+			services.AddScoped(typeof(IBasketRepo),typeof(BasketRepo));
 			//webApplicationBuilder.Services.AddScoped<IGenericRepository<Product>,GenericRepository<Product>>();
 			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductBrand>,GenericRepository<ProductBrand>>();
 			//webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>,GenericRepository<ProductCategory>>();
